@@ -11,9 +11,13 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.coolweather.android.db.City;
+import com.coolweather.android.db.County;
+import com.coolweather.android.db.Province;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.litepal.LitePal;
 import org.litepal.tablemanager.Connector;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
@@ -35,12 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 }

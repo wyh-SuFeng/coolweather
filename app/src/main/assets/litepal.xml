@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value="BookStore" />
-    <version value="1" />
+    <dbname value="Book2" />
+    <version value="5" />
 
     <list>
         <mapping class="com.coolweather.android.db.City" ></mapping>
         <mapping class="com.coolweather.android.db.County"></mapping>
         <mapping class="com.coolweather.android.db.Province"></mapping>
     </list>
+    <storage value="external" />
 
-  </litepal>
+</litepal>
