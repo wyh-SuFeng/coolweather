@@ -1,6 +1,7 @@
 package com.coolweather.android;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.coolweather.android.db.City;
@@ -77,6 +79,21 @@ public class chooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    String weatherId=countyList.get(position).getWeatherId();
+                    if (getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else if (getActivity() instanceof WeatherActivity) {
+                        WeatherActivity activity= (WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefresh.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+
+                    }
+
                 }
             }
         });
@@ -114,7 +131,6 @@ public class chooseAreaFragment extends Fragment {
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
         cityList = LitePal.where("provinceid=?", String.valueOf(selectedProvince.getId())).find(City.class);
-        Log.d("kkkkkkkkkkkkkk",""+cityList.size());
         if (cityList.size()>0) {
             dataList.clear();
             for (City city : cityList) {
@@ -124,7 +140,6 @@ public class chooseAreaFragment extends Fragment {
             listView.setSelection(0);
             currentLevel=LEVEL_CITY;
         } else {
-            Log.d("kkkkkkkkkkkkkk","0000000000000");
             int provinceCode=selectedProvince.getProvinceCode();
             String address = "http://guolin.tech/api/china/" + provinceCode;
             queryFromServer(address, "city");
@@ -171,7 +186,6 @@ public class chooseAreaFragment extends Fragment {
            boolean result=false;
                if ("province".equals(type)) {
                    result = Utility.handleProvinceResponse(responseText);
-                   Log.d("mmmmmmmmm", "kkk" + result);
                } else if ("city".equals(type)) {
                    result = Utility.handleCityResponse(responseText, selectedProvince.getId());//
                } else if ("county".equals(type)) {

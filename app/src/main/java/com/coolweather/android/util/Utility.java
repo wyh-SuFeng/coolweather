@@ -6,6 +6,8 @@ import android.util.Log;
 import com.coolweather.android.db.City;
 import com.coolweather.android.db.County;
 import com.coolweather.android.db.Province;
+import com.coolweather.android.gson.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,5 +74,21 @@ public class Utility {
         }
         return false;
     }
-
+    public static Weather handleWeatherResponse(String response)
+    {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent=jsonArray.getJSONObject(0).toString();
+            Log.d("ll", weatherContent);
+            Gson gson=new Gson();
+            Weather weather = gson.fromJson(weatherContent, Weather.class);//这里的数据只对应类中有的，
+            // 名字相同变对应赋值，没有则闪过，得到的数据跟类中的数据不一定一一对应。
+//            Log.d("ii", "handleWeatherResponse: "+weather.suggestion.sport.info);
+            return weather;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
